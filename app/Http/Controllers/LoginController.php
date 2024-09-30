@@ -16,14 +16,17 @@ class LoginController extends Controller
 
     public function login(Request $request)
     {
-        // Validasi input login
+        // Validasi input login, pastikan salah satu dari email, nidn, atau nim diisi
         $request->validate([
-            'email' => 'required|email',
+            'login' => 'required|string', // Bisa berupa email, nidn, atau nim
             'password' => 'required|string',
         ]);
 
-        // Cek kredensial pengguna dengan Auth::attempt
-        if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
+        // Tentukan apakah input adalah email, NIDN, atau NIM
+        $loginType = filter_var($request->login, FILTER_VALIDATE_EMAIL) ? 'email' : (is_numeric($request->login) ? 'nidn' : 'nim');
+
+        // Cek kredensial pengguna dengan Auth::attempt menggunakan input yang sesuai
+        if (Auth::attempt([$loginType => $request->login, 'password' => $request->password])) {
 
             // Setelah login berhasil, periksa role pengguna
             $user = Auth::user();
@@ -44,7 +47,7 @@ class LoginController extends Controller
 
         // Jika login gagal, kembalikan dengan pesan kesalahan
         return back()->withErrors([
-            'email' => 'Email atau password salah.',
+            'login' => 'Email, NIDN, NIM, atau password salah.',
         ]);
     }
 

@@ -11,30 +11,42 @@ class RegisterController extends Controller
 {
     public function showRegistrationForm()
     {
-        return view('auth.register_page');
+        return view('admin.register_page');
     }
 
     public function register(Request $request)
     {
         $request->validate([
-            'fullname' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
+            'role' => 'required|string|in:mahasiswa,dosen,ketua_kbk',
+            'nim' => 'nullable|string|max:20|unique:users',
             'nidn' => 'nullable|string|max:20|unique:users',
             'password' => 'required|string|min:8|confirmed',
         ]);
 
+        // Periksa apakah NIM atau NIDN harus diisi
+        if ($request->role === 'mahasiswa' && !$request->nim) {
+            return back()->withErrors(['nim' => 'NIM harus diisi untuk Mahasiswa']);
+        } elseif (($request->role === 'dosen' || $request->role === 'ketua_kbk') && !$request->nidn) {
+            return back()->withErrors(['nidn' => 'NIDN harus diisi untuk Dosen atau Ketua KBK']);
+        }
+
+        // Buat pengguna dengan role
         $user = User::create([
-            'name' => $request->fullname,
-            'email' => $request->email,
-            'nidn' => $request->nidn,
+            'nim' => $request->role === 'mahasiswa' ? $request->nim : null,
+            'nidn' => ($request->role === 'dosen' || $request->role === 'ketua_kbk') ? $request->nidn : null,
             'password' => Hash::make($request->password),
         ]);
 
-        // Tambahkan role default
-        $user->assignRole('dosen');
+        // Mengaitkan role
+        $user->assignRole('admin');
 
         Auth::login($user);
 
-        return redirect()->route('login');
+        return redirect()->route('register');
+    }
+
+    public function showEdit()
+    {
+        return view('admin.edit_akun&roles');
     }
 }

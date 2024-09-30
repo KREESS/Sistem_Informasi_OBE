@@ -94,14 +94,6 @@
 
                 <p>Anda login sebagai: {{ Auth::user()->name }}</p>
                 <p>Role Anda: {{ Auth::user()->getRoleNames()->implode(', ') }}</p>
-
-                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                    @csrf
-                </form>
-
-                <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                    Logout
-                </a>
             </main>
         </div>
     </div>

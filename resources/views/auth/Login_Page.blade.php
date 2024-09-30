@@ -65,8 +65,9 @@
                         <form action="{{ route('login') }}" method="POST">
                             @csrf
                             <div class="form-floating mb-3">
-                                <input type="email" class="form-control" id="floatingInput" name="email" placeholder="name@example.com">
-                                <label for="floatingInput">Email</label>
+                                <!-- Ubah input ini menjadi lebih umum untuk login dengan email, NIDN, atau NIM -->
+                                <input type="text" class="form-control" id="floatingInput" name="login" placeholder="Email, NIDN, atau NIM">
+                                <label for="floatingInput">Email, NIDN, atau NIM</label>
                             </div>
                             <div class="form-floating mb-3">
                                 <input type="password" class="form-control" id="floatingPassword" name="password" placeholder="Password">
@@ -86,9 +87,6 @@
                         </form>
                         <div class="text-center mt-3">
                             <a href="#" class="text-decoration-none">Lupa password?</a>
-                        </div>
-                        <div class="text-center mt-2">
-                            <a href="{{ route('register') }}" class="text-decoration-none">Buat akun baru</a>
                         </div>
                     </div>
                 </div>

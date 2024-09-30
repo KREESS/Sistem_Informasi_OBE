@@ -19,10 +19,6 @@ use App\Http\Controllers\AdminController;
 
 
 
-Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
-Route::post('/register', [RegisterController::class, 'register']);
-
-
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [LoginController::class, 'login']);
 
@@ -38,10 +34,13 @@ Route::group(['middleware' => ['auth', 'role:dosen']], function () {
 
 
 
-
 // Group untuk Admin
 Route::group(['middleware' => ['auth', 'role:admin']], function () {
     Route::get('/admin/dashboard', function () {
-        return view('admin.dashboard'); // Buat view dashboard untuk admin
+        return view('admin.dashboard');
     })->name('admin.dashboard');
+
+    Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
+    Route::post('/register', [RegisterController::class, 'register']);
+    Route::get('/show&edit', [RegisterController::class, 'showEdit'])->name('edit');
 });
