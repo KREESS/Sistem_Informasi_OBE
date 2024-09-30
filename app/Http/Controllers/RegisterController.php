@@ -38,11 +38,10 @@ class RegisterController extends Controller
         ]);
 
         // Mengaitkan role
-        $user->assignRole('admin');
+        $user->assignRole($request->role);
 
-        Auth::login($user);
-
-        return redirect()->route('register');
+        // Redirect ke halaman yang diinginkan
+        return redirect()->route('register')->with('success', 'Pengguna baru berhasil didaftarkan.');
     }
 
     public function showEdit()
