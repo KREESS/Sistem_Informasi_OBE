@@ -71,37 +71,55 @@
             <!-- Sidebar -->
             @include('sidebar_admin.header_admin')
 
-            <!-- Main content -->
             <main id="content" class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-                <nav class="navbar navbar-light bg-light" id="navbar">
-                    <div class="container-fluid">
-                        <!-- Logo -->
-                        <a class="navbar-brand" href="#">
-                            <img src="path/to/your/logo.png" alt="Logo" width="30" height="30" class="d-inline-block align-text-top">
-                            OBE Dashboard
-                        </a>
-                        <!-- Toggle button -->
-                        <button class="btn btn-primary" id="toggleSidebar">
-                            <span class="navbar-toggler-icon"></span>
-                        </button>
-                    </div>
-                </nav>
-
-                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                    <h1 class="h2">Selamat Datang di Dashboard Admin</h1>
+            <nav class="navbar navbar-light bg-light" id="navbar">
+                <div class="container-fluid">
+                    <!-- Logo -->
+                    <a class="navbar-brand" href="#">
+                        <img src="path/to/your/logo.png" alt="Logo" width="30" height="30" class="d-inline-block align-text-top">
+                        OBE Dashboard
+                    </a>
+                    <!-- Toggle button -->
+                    <button class="btn btn-primary" id="toggleSidebar">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
                 </div>
+            </nav>
 
-                <p>Anda login sebagai: {{ Auth::user()->name }}</p>
-                <p>Role Anda: {{ Auth::user()->getRoleNames()->implode(', ') }}</p>
-
-                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                    @csrf
-                </form>
-
-                <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                    Logout
-                </a>
-            </main>
+            <!-- Tabel Profil Lulusan (PL) -->
+            <div class="container mt-4">
+                <h2>Daftar Profil Lulusan (PL)</h2>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Kode PL</th>
+                            <th>Profil Lulusan</th>
+                            <th>Deskripsi</th>
+                            <th>Threshold</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($pls as $pl)
+                        <tr>
+                            <td>{{ $pl->kode_pl }}</td>
+                            <td>{{ $pl->profil_lulusan }}</td>
+                            <td>{{ $pl->deskripsi }}</td>
+                            <td>{{ $pl->threshold }}</td>
+                            <td>
+                                <a href="{{ route('edit.pl', $pl->id) }}" class="btn btn-warning btn-sm">Edit</a>
+                                <form action="{{ route('delete.pl', $pl->id) }}" method="POST" style="display:inline;">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus?')">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </main>
         </div>
     </div>
 
